@@ -1,6 +1,7 @@
 import type Database from 'better-sqlite3';
 import express from 'express';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import { createMoviesRouter } from './routes/movies.js';
 
 /**
  * Builds the Express app around an injected database so tests can use a fresh
@@ -17,6 +18,8 @@ export function createApp(db: Database.Database) {
   app.get('/api/health', (_req, res) => {
     res.status(200).json({ status: 'ok' });
   });
+
+  app.use('/api/movies', createMoviesRouter(db));
 
   app.use(notFoundHandler);
   app.use(errorHandler);
