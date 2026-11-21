@@ -29,7 +29,7 @@ describe('App shell', () => {
     expect(await screen.findByText('No movies yet')).toBeInTheDocument();
   });
 
-  it('switches placeholders when tabs are clicked', async () => {
+  it('switches tabs and renders each view', async () => {
     const user = userEvent.setup();
     render(<App />);
 
@@ -40,8 +40,8 @@ describe('App shell', () => {
       screen.getByRole('tab', { name: 'Rewatch Plan' }),
     ).toHaveAttribute('aria-selected', 'true');
     expect(
-      screen.getByText(
-        'Pick a target movie and see the order to watch everything before it.',
+      await screen.findByText(
+        'Add a movie in the Movies tab to build a rewatch plan.',
       ),
     ).toBeInTheDocument();
 
