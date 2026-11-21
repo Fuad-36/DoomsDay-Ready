@@ -1,10 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import App from '../App';
 
+vi.mock('../api/client', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../api/client')>();
+  return {
+    ...actual,
+    listMovies: vi.fn().mockResolvedValue([]),
+  };
+});
+
 describe('App shell', () => {
-  it('renders the three tabs and the default Movies placeholder', () => {
+  it('renders the three tabs and the default Movies empty state', async () => {
     render(<App />);
 
     expect(
@@ -18,16 +26,14 @@ describe('App shell', () => {
       screen.getByRole('tab', { name: 'Rewatch Plan' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: 'Booking' })).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        'Add and manage the MCU movies you plan to rewatch.',
-      ),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('No movies yet')).toBeInTheDocument();
   });
 
   it('switches placeholders when tabs are clicked', async () => {
     const user = userEvent.setup();
     render(<App />);
+
+    await screen.findByText('No movies yet');
 
     await user.click(screen.getByRole('tab', { name: 'Rewatch Plan' }));
     expect(

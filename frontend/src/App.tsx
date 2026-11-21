@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { EmptyState } from './components/EmptyState';
+import { MoviesTab } from './features/movies/MoviesTab';
 
 const TABS = [
   {
@@ -34,10 +35,10 @@ export default function App() {
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-8 sm:px-6 lg:px-8">
         <header className="border-b border-slate-800 pb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
+          {/* <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
             Blinto Talent Accelerator 2027
-          </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+          </p> */}
+          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl text-amber-400">
             Doomsday Ready
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-400">
@@ -78,18 +79,25 @@ export default function App() {
 
         <main className="mt-6 flex-1">
           <section
-            id={`panel-${active.id}`}
+            id={`panel-${activeTab}`}
             role="tabpanel"
-            aria-labelledby={`tab-${active.id}`}
+            aria-labelledby={`tab-${activeTab}`}
             tabIndex={0}
             className="focus:outline-none"
           >
-            <EmptyState title={active.title} description={active.description} />
+            {activeTab === 'movies' ? (
+              <MoviesTab />
+            ) : (
+              <EmptyState
+                title={active.title}
+                description={active.description}
+              />
+            )}
           </section>
         </main>
 
         <footer className="mt-8 border-t border-slate-800 pt-4 text-xs text-slate-500">
-          Frontend scaffold — views are wired in later steps.
+          Movies are live — rewatch plans and booking are wired next.
         </footer>
       </div>
     </div>
