@@ -14,6 +14,7 @@ import {
 import { withTransaction } from '../db/transaction.js';
 import { AppError } from '../errors.js';
 import { wouldCreateCycle } from '../logic/cycle.js';
+import { buildRewatchOrder } from '../logic/rewatchOrder.js';
 import {
   createMovieSchema,
   toValidationError,
@@ -134,6 +135,23 @@ export function createMoviesRouter(db: Database.Database): Router {
 
   router.get('/', (_req, res) => {
     res.status(200).json(listMovies(db));
+  });
+
+  router.get('/:id/rewatch-order', (req, res) => {
+    // One read gives both the target and every edge buildRewatchOrder needs.
+    const movies = listMovies(db);
+    const target = movies.find((movie) => movie.id === req.params.id);
+
+    if (!target) {
+      throw new AppError(404, 'NOT_FOUND', 'Movie not found');
+    }
+
+    const plan = buildRewatchOrder(target.id, movies);
+
+    res.status(200).json({
+      target: { id: target.id, title: target.title },
+      ...plan,
+    });
   });
 
   router.patch('/:id', (req, res) => {
