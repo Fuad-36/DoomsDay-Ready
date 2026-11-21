@@ -91,6 +91,10 @@ export function AddMovieForm({ movies, onCreated }: AddMovieFormProps) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (submitting) {
+      return;
+    }
+
     const result = validateForm(title, releaseYear, runtimeMinutes);
     setFieldErrors(result.errors);
     setServerError(null);
@@ -161,6 +165,7 @@ export function AddMovieForm({ movies, onCreated }: AddMovieFormProps) {
             {fieldErrors.title ? (
               <p
                 id="add-movie-title-error"
+                role="alert"
                 className="mt-1 text-xs text-red-300"
               >
                 {fieldErrors.title}
@@ -197,6 +202,7 @@ export function AddMovieForm({ movies, onCreated }: AddMovieFormProps) {
             {fieldErrors.releaseYear ? (
               <p
                 id="add-movie-year-error"
+                role="alert"
                 className="mt-1 text-xs text-red-300"
               >
                 {fieldErrors.releaseYear}
@@ -235,6 +241,7 @@ export function AddMovieForm({ movies, onCreated }: AddMovieFormProps) {
             {fieldErrors.runtimeMinutes ? (
               <p
                 id="add-movie-runtime-error"
+                role="alert"
                 className="mt-1 text-xs text-red-300"
               >
                 {fieldErrors.runtimeMinutes}

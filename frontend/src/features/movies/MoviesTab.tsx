@@ -3,7 +3,7 @@ import { listMovies } from '../../api/client';
 import type { Movie } from '../../api/client';
 import { EmptyState } from '../../components/EmptyState';
 import { ErrorMessage } from '../../components/ErrorMessage';
-import { Spinner } from '../../components/Spinner';
+import { LoadingCard } from '../../components/LoadingCard';
 import { useAsync } from '../../hooks/useAsync';
 import { AddMovieForm } from './AddMovieForm';
 import { MovieRow } from './MovieRow';
@@ -27,13 +27,6 @@ function MoviesContent({ initialMovies }: MoviesContentProps) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-semibold text-slate-100">Movies</h2>
-        <p className="mt-1 text-sm text-slate-400">
-          Add and manage the MCU movies you plan to rewatch.
-        </p>
-      </div>
-
       <AddMovieForm movies={movies} onCreated={handleCreated} />
 
       <section aria-labelledby="movie-list-heading" className="space-y-3">
@@ -74,17 +67,22 @@ function MoviesContent({ initialMovies }: MoviesContentProps) {
 export function MoviesTab() {
   const { data, loading, error, reload } = useAsync(listMovies, []);
 
-  if (loading && data === null) {
-    return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-        <Spinner label="Loading movies…" />
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-semibold text-slate-100">Movies</h2>
+        <p className="mt-1 text-sm text-slate-400">
+          Add and manage the MCU movies you plan to rewatch.
+        </p>
       </div>
-    );
-  }
 
-  if (error && data === null) {
-    return <ErrorMessage message={error.message} onRetry={reload} />;
-  }
-
-  return <MoviesContent initialMovies={data ?? []} />;
+      {loading && data === null ? (
+        <LoadingCard label="Loading movies…" />
+      ) : error && data === null ? (
+        <ErrorMessage message={error.message} onRetry={reload} />
+      ) : (
+        <MoviesContent initialMovies={data ?? []} />
+      )}
+    </div>
+  );
 }

@@ -68,14 +68,14 @@ export function PrerequisitePicker({
           {selectedMovies.map((movie) => (
             <li
               key={movie.id}
-              className="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-1 text-xs font-medium text-amber-200"
+              className="inline-flex min-w-0 max-w-full items-center gap-1 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-1 text-xs font-medium text-amber-200"
             >
-              {movie.title}
+              <span className="min-w-0 break-words">{movie.title}</span>
               <button
                 type="button"
                 aria-label={`Remove ${movie.title}`}
                 onClick={() => handleRemove(movie.id)}
-                className="rounded-full p-0.5 text-amber-200/80 transition hover:bg-amber-400/20 hover:text-amber-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+                className="shrink-0 rounded-full p-0.5 text-amber-200/80 transition hover:bg-amber-400/20 hover:text-amber-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
               >
                 <span aria-hidden="true">×</span>
               </button>

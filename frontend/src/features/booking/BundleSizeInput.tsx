@@ -14,10 +14,6 @@ function getValidationMessage(
   value: string,
   sizes: readonly number[],
 ): string | null {
-  if (sizes.length >= MAX_BUNDLE_SIZES) {
-    return `You can add up to ${MAX_BUNDLE_SIZES} bundle sizes.`;
-  }
-
   const trimmed = value.trim();
   if (trimmed.length === 0) {
     return null;
@@ -48,9 +44,11 @@ export function BundleSizeInput({
   const errorId = useId();
   const [value, setValue] = useState('');
 
+  const limitReached = sizes.length >= MAX_BUNDLE_SIZES;
   const validationMessage = getValidationMessage(value, sizes);
   const parsedSize = Number(value.trim());
   const canAdd =
+    !limitReached &&
     value.trim().length > 0 &&
     validationMessage === null &&
     Number.isInteger(parsedSize) &&
@@ -83,8 +81,10 @@ export function BundleSizeInput({
           value={value}
           placeholder="e.g. 2"
           onChange={(event) => setValue(event.target.value)}
-          aria-invalid={Boolean(validationMessage)}
-          aria-describedby={validationMessage ? errorId : undefined}
+          aria-invalid={!limitReached && Boolean(validationMessage)}
+          aria-describedby={
+            limitReached || validationMessage ? errorId : undefined
+          }
           className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-600 focus:border-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 sm:max-w-xs"
         />
         <button
@@ -97,7 +97,11 @@ export function BundleSizeInput({
         </button>
       </div>
 
-      {validationMessage ? (
+      {limitReached ? (
+        <p id={errorId} role="status" className="text-xs text-amber-300">
+          You can add up to {MAX_BUNDLE_SIZES} bundle sizes.
+        </p>
+      ) : validationMessage ? (
         <p id={errorId} role="alert" className="text-xs text-red-300">
           {validationMessage}
         </p>

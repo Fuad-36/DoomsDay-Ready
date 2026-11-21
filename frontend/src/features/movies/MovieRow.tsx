@@ -29,6 +29,10 @@ export function MovieRow({ movie, movies, onUpdated }: MovieRowProps) {
     .filter((candidate): candidate is Movie => candidate !== undefined);
 
   async function handleWatchedChange(nextWatched: boolean) {
+    if (watchedPending) {
+      return;
+    }
+
     const previousWatched = movie.watched;
     setWatched(nextWatched);
     setWatchedPending(true);
@@ -64,6 +68,10 @@ export function MovieRow({ movie, movies, onUpdated }: MovieRowProps) {
   }
 
   async function savePrerequisites() {
+    if (saving) {
+      return;
+    }
+
     setSaving(true);
     setEditingError(null);
 
@@ -125,7 +133,7 @@ export function MovieRow({ movie, movies, onUpdated }: MovieRowProps) {
             {prerequisiteMovies.map((prerequisite) => (
               <li
                 key={prerequisite.id}
-                className="rounded-full border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs text-slate-300"
+                className="max-w-full break-words rounded-full border border-slate-700 bg-slate-800 px-2.5 py-1 text-xs text-slate-300"
               >
                 {prerequisite.title}
               </li>

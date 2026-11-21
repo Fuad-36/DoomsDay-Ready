@@ -62,12 +62,16 @@ describe('BundleSizeInput', () => {
     const user = userEvent.setup();
     const sizes = Array.from({ length: 10 }, (_, index) => index + 1);
     const { onAdd } = renderInput(sizes);
+    const input = screen.getByLabelText('Bundle size');
 
-    await user.type(screen.getByLabelText('Bundle size'), '11');
+    await user.type(input, '11');
 
-    expect(
-      screen.getByText('You can add up to 10 bundle sizes.'),
-    ).toBeInTheDocument();
+    const limitMessage = screen.getByText(
+      'You can add up to 10 bundle sizes.',
+    );
+    expect(limitMessage).toBeInTheDocument();
+    expect(limitMessage).toHaveAttribute('role', 'status');
+    expect(input).not.toHaveAttribute('aria-invalid', 'true');
     expect(screen.getByRole('button', { name: 'Add size' })).toBeDisabled();
     expect(onAdd).not.toHaveBeenCalled();
   });

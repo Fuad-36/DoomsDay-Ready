@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-import { getBookingQuote } from '../../api/client';
-import type { BookingQuote, Cinema } from '../../api/client';
-import { ErrorMessage } from '../../components/ErrorMessage';
-import { Spinner } from '../../components/Spinner';
-import { BookingResult } from './BookingResult';
-import { toErrorMessage } from './errors';
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { getBookingQuote } from "../../api/client";
+import type { BookingQuote, Cinema } from "../../api/client";
+import { ErrorMessage } from "../../components/ErrorMessage";
+import { Spinner } from "../../components/Spinner";
+import { BookingResult } from "./BookingResult";
+import { toErrorMessage } from "./errors";
 
 const MIN_GROUP_SIZE = 1;
 const MAX_GROUP_SIZE = 10000;
@@ -19,7 +19,7 @@ interface BookingQuoteFormProps {
 function validateGroupSize(value: string): string | null {
   const trimmed = value.trim();
   if (trimmed.length === 0) {
-    return 'Group size is required.';
+    return "Group size is required.";
   }
 
   const groupSize = Number(trimmed);
@@ -39,7 +39,7 @@ export function BookingQuoteForm({
   selectedCinemaId,
   onCinemaChange,
 }: BookingQuoteFormProps) {
-  const [groupSize, setGroupSize] = useState('');
+  const [groupSize, setGroupSize] = useState("");
   const [fieldError, setFieldError] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
   const [quote, setQuote] = useState<BookingQuote | null>(null);
@@ -68,6 +68,10 @@ export function BookingQuoteForm({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (loading) {
+      return;
+    }
+
     const validationError = validateGroupSize(groupSize);
     setFieldError(validationError);
     setServerError(null);
@@ -87,10 +91,7 @@ export function BookingQuoteForm({
       setQuote(result);
     } catch (reason: unknown) {
       setServerError(
-        toErrorMessage(
-          reason,
-          'Could not build a quote. Please try again.',
-        ),
+        toErrorMessage(reason, "Could not build a quote. Please try again."),
       );
     } finally {
       setLoading(false);
@@ -98,6 +99,9 @@ export function BookingQuoteForm({
   }
 
   const canSubmit = selectedCinemaId.length > 0 && !loading;
+  const selectedCinema = cinemas.find(
+    (cinema) => cinema.id === selectedCinemaId,
+  );
 
   return (
     <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
@@ -128,6 +132,24 @@ export function BookingQuoteForm({
               </option>
             ))}
           </select>
+          {selectedCinema && (
+            <div className="mt-3 rounded-md border border-slate-700 bg-slate-900/60 p-3">
+              <p className="text-xs font-medium text-slate-400">
+                Available bundle sizes
+              </p>
+
+              <div className="mt-2 flex flex-wrap gap-2">
+                {selectedCinema.bundleSizes.map((size) => (
+                  <span
+                    key={size}
+                    className="rounded-md border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-sm font-medium text-amber-300"
+                  >
+                    {size}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div>
@@ -150,13 +172,14 @@ export function BookingQuoteForm({
             onChange={(event) => handleGroupSizeChange(event.target.value)}
             aria-invalid={Boolean(fieldError)}
             aria-describedby={
-              fieldError ? 'booking-group-size-error' : undefined
+              fieldError ? "booking-group-size-error" : undefined
             }
             className="mt-1 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-600 focus:border-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 disabled:cursor-not-allowed disabled:opacity-60"
           />
           {fieldError ? (
             <p
               id="booking-group-size-error"
+              role="alert"
               className="mt-1 text-xs text-red-300"
             >
               {fieldError}
@@ -174,7 +197,7 @@ export function BookingQuoteForm({
             disabled={!canSubmit}
             className="rounded-lg bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? 'Getting quote…' : 'Get quote'}
+            {loading ? "Getting quote…" : "Get quote"}
           </button>
         </div>
       </form>

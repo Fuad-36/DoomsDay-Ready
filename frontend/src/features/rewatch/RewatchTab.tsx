@@ -2,7 +2,7 @@ import { getRewatchPlan, listMovies } from '../../api/client';
 import type { RewatchPlan } from '../../api/client';
 import { EmptyState } from '../../components/EmptyState';
 import { ErrorMessage } from '../../components/ErrorMessage';
-import { Spinner } from '../../components/Spinner';
+import { LoadingCard } from '../../components/LoadingCard';
 import { useAsync } from '../../hooks/useAsync';
 import { formatDuration } from './formatDuration';
 import { RewatchProgress } from './RewatchProgress';
@@ -10,14 +10,6 @@ import { RewatchProgress } from './RewatchProgress';
 interface RewatchTabProps {
   targetId: string;
   onTargetChange: (id: string) => void;
-}
-
-function LoadingCard({ label }: { label: string }) {
-  return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-      <Spinner label={label} />
-    </div>
-  );
 }
 
 function PlanContent({ plan }: { plan: RewatchPlan }) {

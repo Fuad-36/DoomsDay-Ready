@@ -4,26 +4,9 @@ import { MoviesTab } from './features/movies/MoviesTab';
 import { RewatchTab } from './features/rewatch/RewatchTab';
 
 const TABS = [
-  {
-    id: 'movies',
-    label: 'Movies',
-    title: 'Movies',
-    description: 'Add and manage the MCU movies you plan to rewatch.',
-  },
-  {
-    id: 'rewatch',
-    label: 'Rewatch Plan',
-    title: 'Rewatch Plan',
-    description:
-      'Pick a target movie and see the order to watch everything before it.',
-  },
-  {
-    id: 'booking',
-    label: 'Booking',
-    title: 'Booking',
-    description:
-      'Find a cinema and build an opening-night bundle quote for your group.',
-  },
+  { id: 'movies', label: 'Movies' },
+  { id: 'rewatch', label: 'Rewatch Plan' },
+  { id: 'booking', label: 'Booking' },
 ] as const;
 
 type TabId = (typeof TABS)[number]['id'];
@@ -36,9 +19,6 @@ export default function App() {
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-8 sm:px-6 lg:px-8">
         <header className="border-b border-slate-800 pb-6">
-          {/* <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
-            Blinto Talent Accelerator 2027
-          </p> */}
           <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl text-amber-400">
             Doomsday Ready
           </h1>
@@ -84,7 +64,7 @@ export default function App() {
             role="tabpanel"
             aria-labelledby={`tab-${activeTab}`}
             tabIndex={0}
-            className="focus:outline-none"
+            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber-300/70"
           >
             {activeTab === 'movies' ? (
               <MoviesTab />
@@ -100,7 +80,7 @@ export default function App() {
         </main>
 
         <footer className="mt-8 border-t border-slate-800 pt-4 text-xs text-slate-500">
-          Movies, rewatch plans, and booking are live.
+          Your movie journey, perfectly planned. Track prerequisites, build your rewatch order, and get ready for the next chapter.
         </footer>
       </div>
     </div>
