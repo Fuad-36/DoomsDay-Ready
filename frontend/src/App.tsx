@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { EmptyState } from './components/EmptyState';
+import { BookingTab } from './features/booking/BookingTab';
 import { MoviesTab } from './features/movies/MoviesTab';
 import { RewatchTab } from './features/rewatch/RewatchTab';
 
@@ -31,7 +31,6 @@ type TabId = (typeof TABS)[number]['id'];
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabId>('movies');
   const [rewatchTargetId, setRewatchTargetId] = useState('');
-  const active = TABS.find((tab) => tab.id === activeTab) ?? TABS[0];
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -95,16 +94,13 @@ export default function App() {
                 onTargetChange={setRewatchTargetId}
               />
             ) : (
-              <EmptyState
-                title={active.title}
-                description={active.description}
-              />
+              <BookingTab />
             )}
           </section>
         </main>
 
         <footer className="mt-8 border-t border-slate-800 pt-4 text-xs text-slate-500">
-          Movies and rewatch plans are live — booking is wired next.
+          Movies, rewatch plans, and booking are live.
         </footer>
       </div>
     </div>

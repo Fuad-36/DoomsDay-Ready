@@ -8,6 +8,7 @@ vi.mock('../api/client', async (importOriginal) => {
   return {
     ...actual,
     listMovies: vi.fn().mockResolvedValue([]),
+    listCinemas: vi.fn().mockResolvedValue([]),
   };
 });
 
@@ -47,8 +48,8 @@ describe('App shell', () => {
 
     await user.click(screen.getByRole('tab', { name: 'Booking' }));
     expect(
-      screen.getByText(
-        'Find a cinema and build an opening-night bundle quote for your group.',
+      await screen.findByText(
+        'Add your first cinema above to build a booking quote.',
       ),
     ).toBeInTheDocument();
   });
