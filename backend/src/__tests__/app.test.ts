@@ -11,6 +11,10 @@ describe('app', () => {
     db.close();
   });
 
+  it('exposes the injected database on app.locals', () => {
+    expect(app.locals.db).toBe(db);
+  });
+
   it('responds to GET /api/health with 200 and an ok status', async () => {
     const response = await request(app).get('/api/health');
 

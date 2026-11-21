@@ -1,11 +1,12 @@
-import Database from 'better-sqlite3';
 import { createApp } from './app.js';
+import { openDatabase } from './db/connection.js';
+import { applySchema } from './db/schema.js';
 
 const port = Number(process.env.PORT ?? 3000);
 
-// Placeholder until the DB step wires DB_PATH and the schema. An in-memory
-// database keeps the scaffold runnable without creating files on disk.
-const db = new Database(':memory:');
+const db = openDatabase();
+applySchema(db);
+
 const app = createApp(db);
 
 app.listen(port, () => {

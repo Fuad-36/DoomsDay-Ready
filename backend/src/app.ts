@@ -5,11 +5,12 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 /**
  * Builds the Express app around an injected database so tests can use a fresh
  * in-memory database while the server uses the real one.
- *
- * The database handle is unused until the DB layer lands, hence the `_` prefix.
  */
-export function createApp(_db: Database.Database) {
+export function createApp(db: Database.Database) {
   const app = express();
+
+  // Route modules added in later steps can reach the connection here.
+  app.locals.db = db;
 
   app.use(express.json());
 
